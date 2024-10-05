@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Exploration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #007BFF;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        #dataset-search {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        #search-button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+
+        #datasets-list {
+            margin-top: 15px;
+        }
+
+        #dataset-options {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #dataset-options li {
+            margin: 5px 0;
+        }
+
+        #dataset-options a {
+            display: block;
+            padding: 10px;
+            background-color: #e9ecef;
+            color: #333;
+            text-decoration: none;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #dataset-options a:hover {
+            background-color: #d3d3d3;
+        }
+
+        #no-options {
+            color: red;
+            display: none;
+            text-align: center;
+        }
+        .arrow-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+        .arrow {
+            width: 50px;
+            height: 50px;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .arrow img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .arrow:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section id="data-exploration">
+            <h2>Data Exploration and Access</h2>
+            <input type="text" id="dataset-search" placeholder="Search datasets...">
+            <button id="search-button">Search</button>
+            <div id="datasets-list">
+                <h3>Available Datasets</h3>
+                <p>Click on the dataset box to begin your download.</p>
+                <ul id="dataset-options">
+                    <li><a href="2010 - 2023 CHIRPS Precipitation (Global).zip" download>2010 - 2023 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2023 CHIRPS Precipitation (Global).png" download>2023 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2022 CHIRPS Precipitation (Global).png" download>2022 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2021 CHIRPS Precipitation (Global).png" download>2021 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2020 CHIRPS Precipitation (Global).png" download>2020 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2019 CHIRPS Precipitation (Global).png" download>2019 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2018 CHIRPS Precipitation (Global).png" download>2018 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2017 CHIRPS Precipitation (Global).png" download>2017 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2016 CHIRPS Precipitation (Global).png" download>2016 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2015 CHIRPS Precipitation (Global).png" download>2015 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2014 CHIRPS Precipitation (Global).png" download>2014 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2013 CHIRPS Precipitation (Global).png" download>2013 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2012 CHIRPS Precipitation (Global).png" download>2012 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2011 CHIRPS Precipitation (Global).png" download>2011 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2010 CHIRPS Precipitation (Global).png" download>2010 CHIRPS Precipitation (Global)</a></li>
+                    <li><a href="2010 - 2023 Copernicus Soil Water Index (Global).zip" download>2010 - 2023 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2023 Copernicus Soil Water Index (Global).png" download>2023 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2022 Copernicus Soil Water Index (Global).png" download>2022 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2021 Copernicus Soil Water Index (Global).png" download>2021 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2020 Copernicus Soil Water Index (Global).png" download>2020 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2019 Copernicus Soil Water Index (Global).png" download>2019 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2018 Copernicus Soil Water Index (Global).png" download>2018 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2017 Copernicus Soil Water Index (Global).png" download>2017 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2016 Copernicus Soil Water Index (Global).png" download>2016 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2015 Copernicus Soil Water Index (Global).png" download>2015 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2014 Copernicus Soil Water Index (Global).png" download>2014 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2013 Copernicus Soil Water Index (Global).png" download>2013 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2012 Copernicus Soil Water Index (Global).png" download>2012 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2011 Copernicus Soil Water Index (Global).png" download>2011 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2010 Copernicus Soil Water Index (Global).png" download>2010 Copernicus Soil Water Index (Global)</a></li>
+                    <li><a href="2010 - 2023 MODIS:Terra NDVI 8-Day (Global).zip" download>2010 - 2023 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2023 MODIS:Terra NDVI 8-Day (Global).png" download>2023 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2022 MODIS:Terra NDVI 8-Day (Global).png" download>2022 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2021 MODIS:Terra NDVI 8-Day (Global).png" download>2021 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2020 MODIS:Terra NDVI 8-Day (Global).png" download>2020 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2019 MODIS:Terra NDVI 8-Day (Global).png" download>2019 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2018 MODIS:Terra NDVI 8-Day (Global).png" download>2018 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2017 MODIS:Terra NDVI 8-Day (Global).png" download>2017 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2016 MODIS:Terra NDVI 8-Day (Global).png" download>2016 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2015 MODIS:Terra NDVI 8-Day (Global).png" download>2015 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2014 MODIS:Terra NDVI 8-Day (Global).png" download>2014 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2013 MODIS:Terra NDVI 8-Day (Global).png" download>2013 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2012 MODIS:Terra NDVI 8-Day (Global).png" download>2012 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2011 MODIS:Terra NDVI 8-Day (Global).png" download>2011 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="2010 MODIS:Terra NDVI 8-Day (Global).png" download>2010 MODIS:Terra NDVI 8-Day (Global)</a></li>
+                    <li><a href="https://www.dropbox.com/scl/fi/e0q8uxlcmh4j02u7fvroy/ECOSTRESS_L3_ET_PT-JPL_25461_011_20230101T175218_0601_01.h5?rlkey=2px1jdxy2t51zce58tk3gf5r6&st=dc3weoke&dl=0"  id="et">20230101 ECOSTRESS Evapotranspiration PT-JPL Daily L3 Global 70 m</a></li>
+
+                </ul>
+                <p id="no-options">No datasets found.</p>
+            </div>
+        </section>
+    </main>
+    <div class="arrow-container">
+        <a href="index.html">
+            <div class="arrow">
+                <img src="back.png" alt="Back to Home">
+            </div>
+        </a>
+    </div>
+    <script>
+        const searchInput = document.getElementById('dataset-search');
+        const datasetOptions = document.querySelectorAll('#dataset-options li');
+        const noOptionsMessage = document.getElementById('no-options');
+
+        searchInput.addEventListener('input', () => {
+            const searchValue = searchInput.value.toLowerCase();
+            let hasResults = false;
+
+            datasetOptions.forEach(option => {
+                const linkText = option.textContent.toLowerCase();
+                if (linkText.includes(searchValue)) {
+                    option.style.display = 'block';
+                    hasResults = true;
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            noOptionsMessage.style.display = hasResults ? 'none' : 'block';
+        });
+        document.getElementById("et").addEventListener("click", function(event) {
+            event.preventDefault();  // Prevent the default behavior of the link
+            window.open(this.href, '_blank');  // Open the link in a new tab
+        });
+
+    </script>
+</body>
+</html>

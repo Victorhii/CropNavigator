@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Precipitation for Farmers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .precipitation-level {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ecf0f1;
+        }
+        .action {
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .arrow-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+        .arrow {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .arrow img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .arrow:hover {
+            transform: scale(1.1);
+        }
+        .note {
+            font-style: italic;
+            color: #555;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Understanding Precipitation for Farmers</h1>
+    <p>Precipitation, measured in mm/day, is crucial for crop growth. This guide outlines precipitation levels and essential actions to optimize your farming practices.</p>
+
+    <div class="precipitation-level">
+        <h2>Precipitation Levels</h2>
+        <ul>
+            <li><strong>0 - 2 mm/day:</strong> Very Low (Water crops)</li>
+            <li><strong>2 - 5 mm/day:</strong> Low (Monitor water needs)</li>
+            <li><strong>5 - 10 mm/day:</strong> Moderate (Good for crops)</li>
+            <li><strong>10 - 20 mm/day:</strong> High (Prevent waterlogging)</li>
+            <li><strong>20 mm/day and above:</strong> Very High (Flood risk)</li>
+        </ul>
+    </div>
+
+    <h2>Action Steps</h2>
+
+    <div class="action">
+        <h3>0 - 2 mm/day: Very Low</h3>
+        <ul>
+            <li>Water crops.</li>
+            <li>Check soil moisture regularly.</li>
+        </ul>
+        <p class="note">Use water-efficient systems.</p>
+    </div>
+
+    <div class="action">
+        <h3>2 - 5 mm/day: Low</h3>
+        <ul>
+            <li>Water as needed.</li>
+            <li>Utilize rainwater harvesting.</li>
+        </ul>
+    </div>
+
+    <div class="action">
+        <h3>5 - 10 mm/day: Moderate</h3>
+        <ul>
+            <li>Monitor soil moisture.</li>
+            <li>Check crop health.</li>
+        </ul>
+    </div>
+
+    <div class="action">
+        <h3>10 - 20 mm/day: High</h3>
+        <ul>
+            <li>Ensure drainage.</li>
+            <li>Check for diseases.</li>
+        </ul>
+    </div>
+
+    <div class="action">
+        <h3>20 mm/day and above: Very High</h3>
+        <ul>
+            <li>Evaluate for flooding.</li>
+            <li>Implement erosion control.</li>
+        </ul>
+    </div>
+
+    <div class="arrow-container">
+        <a href="index.html">
+            <div class="arrow">
+                <img src="back.png" alt="Back Arrow">
+            </div>
+        </a>
+    </div>
+
+</body>
+</html>

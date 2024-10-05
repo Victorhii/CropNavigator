@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Air Quality Index for Agriculture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .aqi-level, .action, .alert {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ecf0f1;
+        }
+        .action {
+            background-color: #dff0d8;
+        }
+        .alert {
+            background-color: #f2dede;
+        }
+        .arrow-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+        .arrow {
+            width: 50px;
+            height: 50px;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .arrow img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .arrow:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Understanding Air Quality Index for Agriculture</h1>
+    <p>The AQI measures air quality, with higher values indicating more pollution. Poor air quality can affect plant health and growth. Here's a guide on the AQI scale (1 to 5) and recommended agricultural actions for plants.</p>
+
+    <div class="aqi-level">
+        <h2>AQI Levels</h2>
+        <ul>
+            <li><strong>AQI 1:</strong> Excellent (0 - 50)</li>
+            <li><strong>AQI 2:</strong> Good (51 - 100)</li>
+            <li><strong>AQI 3:</strong> Moderate (101 - 150)</li>
+            <li><strong>AQI 4:</strong> Poor (151 - 200)</li>
+            <li><strong>AQI 5:</strong> Hazardous (201+)</li>
+        </ul>
+    </div>
+
+    <h2>Plant Actions Based on AQI Levels</h2>
+
+    <div class="action">
+        <h3>AQI 1: Excellent (0 - 50)</h3>
+        <p>Optimal conditions for all planting, irrigation, and harvesting activities.</p>
+    </div>
+
+    <div class="action">
+        <h3>AQI 2: Good (51 - 100)</h3>
+        <p>Continue normal planting and irrigation practices; minimal risk for plants.</p>
+    </div>
+
+    <div class="action">
+        <h3>AQI 3: Moderate (101 - 150)</h3>
+        <p>Monitor sensitive plants for stress; consider using covers to protect against pollution.</p>
+    </div>
+
+    <div class="alert">
+        <h3>AQI 4: Poor (151 - 200)</h3>
+        <p>Implement protective measures for vulnerable plants; limit watering to reduce stress.</p>
+    </div>
+
+    <div class="alert">
+        <h3>AQI 5: Hazardous (201+)</h3>
+        <p>Halt planting and outdoor activities; cover sensitive plants and consider indoor protection.</p>
+    </div>
+
+    <div class="arrow-container">
+        <a href="index.html">
+            <div class="arrow">
+                <img src="back.png" alt="Left Arrow">
+            </div>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Cloudiness for Farmers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .cloudiness-level {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ecf0f1;
+        }
+        .action {
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .arrow-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+        .arrow {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .arrow img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .arrow:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Understanding Cloudiness for Farmers</h1>
+    <p>Cloudiness affects sunlight and water needs for crops. Here’s a guide to help you make informed decisions.</p>
+
+    <div class="cloudiness-level">
+        <h2>Cloudiness Levels</h2>
+        <ul>
+            <li><strong>0% - 20%:</strong> Clear</li>
+            <li><strong>20% - 50%:</strong> Partly Cloudy</li>
+            <li><strong>50% - 80%:</strong> Mostly Cloudy</li>
+            <li><strong>80% - 100%:</strong> Overcast</li>
+        </ul>
+    </div>
+
+    <h2>What to Do Based on Cloudiness</h2>
+
+    <div class="action">
+        <h3>0% - 20%: Clear</h3>
+        <p>Water more; check crops regularly to prevent drying out.</p>
+    </div>
+
+    <div class="action">
+        <h3>20% - 50%: Partly Cloudy</h3>
+        <p>Maintain your usual watering schedule; monitor soil moisture.</p>
+    </div>
+
+    <div class="action">
+        <h3>50% - 80%: Mostly Cloudy</h3>
+        <p>Reduce watering; watch for rain and puddles in fields.</p>
+    </div>
+
+    <div class="action">
+        <h3>80% - 100%: Overcast</h3>
+        <p>Pause watering if rain is expected; prevent waterlogging.</p>
+    </div>
+    
+    <div class="arrow-container">
+        <a href="index.html">
+            <div class="arrow">
+                <img src="back.png" alt="Left Arrow">
+            </div>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Evapotranspiration in mm/hr for Farmers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .evapotranspiration-level {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ecf0f1;
+        }
+        .action {
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .arrow-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+        .arrow {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .arrow img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .arrow:hover {
+            transform: scale(1.1);
+        }
+        .note {
+            font-style: italic;
+            color: #555;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Understanding Evapotranspiration in mm/hr for Farmers</h1>
+    <p>Evapotranspiration (ET) is essential for determining your crops' water needs, combining evaporation and transpiration, measured in millimeters per hour (mm/hr). This guide helps you interpret ET levels and take appropriate actions for your farm.</p>
+
+    <div class="evapotranspiration-level">
+        <h2>Evapotranspiration Levels</h2>
+        <ul>
+            <li><strong>0 - 0.1 mm/hr:</strong> Very Low (Water needed)</li>
+            <li><strong>0.1 - 0.3 mm/hr:</strong> Low (Watering may be necessary)</li>
+            <li><strong>0.3 - 0.5 mm/hr:</strong> Optimal (Watering is on track)</li>
+            <li><strong>0.5 - 0.7 mm/hr:</strong> High (Increase watering frequency)</li>
+            <li><strong>0.7 mm/hr and above:</strong> Very High (Critical water need)</li>
+        </ul>
+    </div>
+
+    <h2>Action Steps Based on ET Levels</h2>
+
+    <div class="action">
+        <h3>0 - 0.1 mm/hr: Very Low</h3>
+        <p>
+            <strong>Actions:</strong>
+            <ul>
+                <li>Water crops to prevent drought stress.</li>
+                <li>Check soil moisture regularly.</li>
+                <li>Use mulch to conserve moisture.</li>
+            </ul>
+        </p>
+        <p class="note">Consider collecting rainwater for irrigation!</p>
+    </div>
+
+    <div class="action">
+        <h3>0.1 - 0.3 mm/hr: Low</h3>
+        <p>
+            <strong>Actions:</strong>
+            <ul>
+                <li>Water according to crop needs.</li>
+                <li>Plan for rainfall using forecasts.</li>
+                <li>Adjust irrigation times to reduce evaporation.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="action">
+        <h3>0.3 - 0.5 mm/hr: Optimal</h3>
+        <p>
+            <strong>Actions:</strong>
+            <ul>
+                <li>Maintain current watering practices.</li>
+                <li>Monitor ET levels regularly.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="action">
+        <h3>0.5 - 0.7 mm/hr: High</h3>
+        <p>
+            <strong>Actions:</strong>
+            <ul>
+                <li>Increase watering frequency.</li>
+                <li>Check for signs of heat stress.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="action">
+        <h3>0.7 mm/hr and above: Very High</h3>
+        <p>
+            <strong>Actions:</strong>
+            <ul>
+                <li>Ensure enough water supply.</li>
+                <li>Avoid planting sensitive crops during this period.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="arrow-container">
+        <a href="index.html">
+            <div class="arrow">
+                <img src="back.png" alt="Back Arrow">
+            </div>
+        </a>
+    </div>
+
+</body>
+</html>
