@@ -1,0 +1,38 @@
+#map {
+            height: 500px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1rem;
+        }
+        .map-container{
+             background-color: var(--background-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            padding: 20px;
+        }
+
+        .coordinates {
+            text-align: center;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--background-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .time-gdp, .city-name, .right-side div {
+            font-weight: 600;
+        }
+        .city-name {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }

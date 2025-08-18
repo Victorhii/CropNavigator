@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Coordinate Map</title>
+    <!-- Note: cdn.tailwindcss.com is for development only. For production, consider a build process. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        xintegrity="sha512-uGz94P+yGjM8fJ6F+1+g9iWlQ5R4Z9i5u+h6n5tC8+y5P4F1J3p5+p7J5e+J5e+p3J9C8L1/99+L+yF5Z7M="
+        crossorigin=""/>
+    <style>
+        /* Ensures the body uses the Inter font and centers the content */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom styles for the map container */
+        #map {
+            height: 60vh;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-4 sm:p-8">
+
+    <div class="max-w-4xl w-full mx-auto">
+        <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-2">Interactive Coordinate Map</h1>
+        <p class="text-center text-gray-600 mb-6 sm:mb-8">
+            Click anywhere on the map to get the latitude and longitude coordinates.
+        </p>
+
+        <div id="map" class="mb-6"></div>
+
+        <div id="coordinate-data-container" class="bg-white rounded-xl shadow-lg p-6 w-full text-center">
+            <h2 class="text-2xl font-bold text-gray-700 mb-2">Selected Coordinates</h2>
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                <p id="la" class="text-lg text-gray-600 font-medium">Latitude: Not set</p>
+                <p id="long" class="text-lg text-gray-600 font-medium">Longitude: Not set</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Leaflet JavaScript must be loaded before our custom script -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        xintegrity="sha512-20nqc+ByqF+9nJv4vP6hJ0L4L2V5p5C5L5L4P5p4p3p="
+        crossorigin=""></script>
+    <script>
+        // Initialize the map, centered on a default location (e.g., Kuala Lumpur, Malaysia)
+        const map = L.map('map').setView([3.140853, 101.693207], 13);
+        let currentMarker = null;
+
+        // Add the base tile layer for the map from OpenStreetMap
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Listen for clicks on the map
+        map.on('click', function(e) {
+            // Use the requested variable names for latitude and longitude
+            const mla = e.latlng.lat;
+            const mlong = e.latlng.lng;
+            
+            // Remove previous marker if it exists
+            if (currentMarker) {
+                map.removeLayer(currentMarker);
+            }
+            
+            // Add a new marker at the clicked location
+            currentMarker = L.marker([mla, mlong]).addTo(map);
+
+            // Save the individual latitude and longitude to local storage
+            localStorage.setItem('lastMla', mla);
+            localStorage.setItem('lastMlong', mlong);
+
+            // Update the UI with the new coordinates
+            document.getElementById('long').textContent = `Longitude: ${mlong}`;
+            document.getElementById('la').textContent = `Latitude: ${mla}`;
+        });
+    </script>
+</body>
+</html>

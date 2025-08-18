@@ -5,11 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CropNavigator</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
     <style>
+        :root {
+            --white: #ffffff;
+            --light-gray: #f0f2f5;
+            --medium-gray: #e0e0e0;
+            --dark-text: #333333;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+            --primary-blue: #007bff;
+            --warning-orange: #ff9800;
+            --alert-red: #f44336;
+        }
+
         html {
             scroll-behavior: smooth;
         }
+
         * {
             margin: 0;
             padding: 0;
@@ -17,64 +32,97 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-text);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
-            display: grid;
-            grid-template-rows: auto 1fr 3fr;
-            width: 100vw;
-            height: 100vh;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1200px;
+            gap: 20px;
+        }
+
+        .banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--white);
+            color: var(--dark-text);
+            text-align: center;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px var(--shadow-light);
+            z-index: 1000;
+        }
+
+        .banner h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
         }
 
         .dropdown-container {
             display: flex;
-            flex-direction: row; 
-            align-items: center; 
-            justify-content: center; 
-            margin-bottom: 20px; 
-            margin-top: 60px;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+            padding: 10px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .dropdown-container label {
-            margin-right: 10px; 
-            font-weight: bold;
+            margin-right: 5px;
+            font-weight: 600;
+            white-space: nowrap;
         }
 
         select {
-            padding: 10px;
-            margin-right: 20px; 
-            border: 1px solid #ccc; 
-            border-radius: 5px; 
-            font-size: 16px; 
-            outline: none; 
-            transition: border-color 0.3s; 
+            padding: 8px 12px;
+            margin-right: 10px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: var(--white);
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        select:last-of-type {
+            margin-right: 0;
         }
 
         select:focus {
-            border-color: #007bff; 
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 24px;
             padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            background-color: var(--white);
+            box-shadow: 0 4px 10px var(--shadow-light);
+            border-radius: 12px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .time-gdp, .city-name {
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .city-name {
@@ -85,227 +133,343 @@
         .right-side {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 5px;
             text-align: right;
         }
 
         .temperature, .weather {
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .coordinates-display {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            margin: 0 20px;
+        }
+
+        .coordinates-display p {
+            font-size: 12px;
+            color: #666;
+            font-weight: normal;
+            line-height: 1.2;
+        }
+        
+        #map-container {
+            padding: 0;
+        }
+
+        #map {
+            height: 40vh;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px var(--shadow-light);
+            width: 100%;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             grid-gap: 20px;
-            padding: 20px;
+            justify-content: center;
         }
 
         .box {
-            background-color: #e0e0e0;
+            background-color: var(--white);
             text-align: center;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 18px;
-            padding: 40px;
-            font-weight: bold;
-            color: #333;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            font-weight: 600;
+            color: var(--dark-text);
+            box-shadow: 0 4px 10px var(--shadow-light);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-        }
-        .box {
             transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .box img {
-            width: 50px; 
-            margin-bottom: 10px; 
-        }
-        .box:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-        #grid {
-            grid-column: span 1; 
-            width: 100%; 
-            height: 100%; 
-        }
-        .data-display {
-            font-size: 16px; 
-            color: #333;
+            min-height: 150px;
         }
 
-        .no-data {
-            color: red;
+        .box img {
+            width: 45px;
+            margin-bottom: 10px;
+        }
+
+        .box:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px var(--shadow-medium);
+        }
+
+        .data-display {
+            font-size: 16px;
+            font-weight: 400;
+            color: #666;
+            margin-top: 5px;
         }
 
         a {
             text-decoration: none;
-            display: block; 
+            display: block;
         }
-        .banner {
+
+        /* --- NOTIFICATION STYLES --- */
+        #notification-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #e0e0e0;
-            color: #333;
-            text-align: center;
-            padding: 10px 0; 
-            z-index: 1000; 
+            top: 100px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 90%;
         }
 
-        .banner h1 {
-            margin: 0; 
-            font-size: 24px;
+        .notification {
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--white);
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 280px;
+            opacity: 0.95;
+            animation: fadeIn 0.5s;
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 0.95;
+                transform: translateX(0);
+            }
+        }
+
+        .notification.alert {
+            background-color: var(--alert-red);
+        }
+
+        .notification.warning {
+            background-color: var(--warning-orange);
+        }
+
+        .notification-close {
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        #enable-notifications-btn {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        #enable-notifications-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        #enable-notifications-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Mobile-specific styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .dropdown-container {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 70px;
+            }
+
+            .dropdown-container select {
+                margin-right: 0;
+                width: 100%;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .coordinates-display, .right-side {
+                text-align: center;
+            }
+            
+            .grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                grid-gap: 15px;
+            }
+            
+            .box {
+                padding: 20px;
+                min-height: 120px;
+                font-size: 16px;
+            }
+            
+            .box img {
+                width: 35px;
+            }
+
+            .data-display {
+                font-size: 14px;
+            }
+        }
     </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            window.addEventListener('beforeunload', function() {
-                sessionStorage.setItem('scrollPosition', window.scrollY);
-            });
-
-            window.addEventListener('load', function() {
-                const scrollPosition = sessionStorage.getItem('scrollPosition');
-                if (scrollPosition !== null) {
-                    window.scrollTo(0, parseInt(scrollPosition, 10));
-                    sessionStorage.removeItem('scrollPosition');
-                }
-            });
-        });
-    </script>
 </head>
 <body>
     <div class="banner">
         <h1>CropNavigator</h1>
     </div>
+
+    <div id="notification-container"></div>
+
     <div class="container">
         <div class="dropdown-container">
             <label for="countrySelect">Select Country:</label>
-            <select id="countrySelect" onchange="updateDistricts()">
-             
-            </select>
+            <select id="countrySelect" onchange="updateDistricts()"></select>
             
             <label for="districtSelect">Select District:</label>
-            <select id="districtSelect" onchange="updateCoordinates()">
-            
-            </select>
+            <select id="districtSelect" onchange="updateCoordinates()"></select>
+        </div>
+
+        <div id="map-container">
+            <div id="map"></div>
         </div>
         <div class="header">
-            <div class="time-gdp"><span id="time">00:00:00</span></div>
-            <div class="city-name">City Name: Example City</div>
+            <div class="time-gdp">
+                <span id="time">00:00:00</span>
+                <button id="enable-notifications-btn">Enable Desktop Alerts</button>
+            </div>
+            <div class="coordinates-display">
+                <p id="la"></p>
+                <p id="long"></p>
+            </div>
+            <div class="city-name">City Name: Fetching...</div>
             <div class="right-side">
                 <div class="temperature" id="temperature">Temperature: Fetching...</div>
                 <div class="weather" id="weatherCondition">Weather Condition: Fetching...</div>
             </div>
         </div>
         <div class="grid">
-
-            
-            
-            <a href = "aqi.html">
-                <div class="box" id="grid">
-                    <img src = "air-quality.png">
+            <a href="aqi.html">
+                <div class="box">
+                    <img src="air-quality.png" alt="Air Quality Icon">
                     <div>Air Quality</div>
-                    <div id="airQuality">Fetching air quality...</div>
+                    <div id="airQuality" class="data-display">Fetching air quality...</div>
                 </div>
             </a>
-            <a href = "cloudiness.html">
-                <div class="box" id="grid">
-                    <img src = "cloudiness.png">
+            <a href="cloudiness.html">
+                <div class="box">
+                    <img src="cloudiness.png" alt="Cloudiness Icon">
                     <div>Cloudiness</div>
-                    <div id="cloudPercentage">Fetching cloud data...</div>
+                    <div id="cloudPercentage" class="data-display">Fetching cloud data...</div>
                 </div>
             </a>
-            <a href = "soilmoisture.html">
-                <div class="box" id="grid">
-                    <img src = "soil moisture.png">
+            <a href="soilmoisture.html">
+                <div class="box">
+                    <img src="soil moisture.png" alt="Soil Moisture Icon">
                     <div>Soil Moisture</div>
                     <div id="soilMoistureDisplay" class="data-display">Fetching soil moisture data...</div>
                 </div>
             </a>
-
-            <a href = "ethour.html">
-                <div class="box" id="grid">
-                    <img src = "et.png">
-                    <div>Evapotranspiration</div>
-                    <div id="evapotranspirationDisplayhour" class="data-display">Fetching evapotranspiration data...</div>
+            <a href="ethour.html">
+                <div class="box">
+                    <img src="et.png" alt="ET Icon">
+                    <div>Evapotranspiration (Hr)</div>
+                    <div id="evapotranspirationDisplayhour" class="data-display">Fetching ET data...</div>
                 </div>
             </a>
-            <a href = "etday.html">
-                <div class="box" id="grid">
-                    <img src = "et.png">
-                    <div>Evapotranspiration</div>
-                    <div id="evapotranspirationDisplay" class="data-display">Fetching evapotranspiration data...</div>
+            <a href="etday.html">
+                <div class="box">
+                    <img src="et.png" alt="ET Icon">
+                    <div>Evapotranspiration (Day)</div>
+                    <div id="evapotranspirationDisplay" class="data-display">Fetching ET data...</div>
                 </div>
             </a>
-            <a href = "precipitationhour.html">
-                <div class="box" id="grid">
-                    <img src = "rain.png">
-                    <div>Precipitation</div>
-                    <div id="precipitationAmounthour">Fetching precipitation data...</div>
+            <a href="precipitationhour.html">
+                <div class="box">
+                    <img src="rain.png" alt="Rain Icon">
+                    <div>Precipitation (Hr)</div>
+                    <div id="precipitationAmounthour" class="data-display">Fetching precipitation data...</div>
                 </div>
             </a>
-            <a href = "precipitationday.html">
-                <div class="box" id="grid"> 
-                    <img src = "rain.png">
-                    <div>Precipitation</div>
-                    <div id="precipitationAmount">Fetching precipitation data...</div>
+            <a href="precipitationday.html">
+                <div class="box">
+                    <img src="rain.png" alt="Rain Icon">
+                    <div>Precipitation (Day)</div>
+                    <div id="precipitationAmount" class="data-display">Fetching precipitation data...</div>
                 </div>
             </a>
-            <a href = "cloudinessforecast.html">
-                <div class="box" id="grid">
-                    <img src = "cloudiness.png">
+            <a href="cloudinessforecast.html">
+                <div class="box">
+                    <img src="cloudiness.png" alt="Cloudiness Icon">
                     <div>Cloudiness Forecast</div>
                 </div>
             </a>
-            <a href = "soilmoistureforecast.html">
-                <div class="box" id="grid">
-                    <img src = "soil moisture.png">
+            <a href="soilmoistureforecast.html">
+                <div class="box">
+                    <img src="soil moisture.png" alt="Soil Moisture Icon">
                     <div>Soil Moisture Forecast</div>
                 </div>
             </a>
             <a href="etforecast.html">
-                <div class="box" id="grid">
-                    <img src = "et.png">
+                <div class="box">
+                    <img src="et.png" alt="ET Icon">
                     <div>Evapotranspiration Forecast</div>
                 </div>
             </a>
             <a href="precipitationforecast.html">
-                <div class="box" id="grid">
-                    <img src = "rain.png">
+                <div class="box">
+                    <img src="rain.png" alt="Rain Icon">
                     <div>Precipitation Forecast</div>
                 </div>
             </a>
-
             <a href="askquestion.html">
-                <div class="box" id="grid">
-                    <img src = "askquestion.png">
-                    Ask Question
+                <div class="box">
+                    <img src="askquestion.png" alt="Ask Question Icon">
+                    <div>Ask Question</div>
                 </div>
             </a>
             <a href="downloaddata.html">
-                <div class="box" id="grid">
-                    <img src = "download.png">
+                <div class="box">
+                    <img src="download.png" alt="Download Icon">
                     <div>Download Data</div>
                 </div>
             </a>
             <a href="code.html">
-                <div class="box" id="grid">
-                    <img src = "download.png">
+                <div class="box">
+                    <img src="download.png" alt="Download Icon">
                     <div>Download Website Source Code</div>
                 </div>
             </a>
-            
         </div>
     </div>
 
     <script>
-
         const locationData = {
+
 "Afghanistan": {
     "Badakhshan": {"lat": 36.6594, "lon": 70.1269},
     "Badghis": {"lat": 35.1618, "lon": 63.4508},
@@ -3385,290 +3549,280 @@
 
 
 
+
         };
 
-        let LATITUDE = 36.6594; 
-        let LONGITUDE = 70.1269; 
+        let LATITUDE = 1.4861;
+        let LONGITUDE = 103.6000;
+        let map;
+        let marker;
+        let isMapMode = false;
 
- 
-        function populateCountries() {
-            const countrySelect = document.getElementById("countrySelect");
-            countrySelect.innerHTML = ""; 
-
-     
-            Object.keys(locationData).forEach(country => {
-                const option = document.createElement("option");
-                option.value = country;
-                option.textContent = country;
-                countrySelect.appendChild(option);
-            });
-
-          
-            const savedCountry = localStorage.getItem('selectedCountry');
-            const savedDistrict = localStorage.getItem('selectedDistrict');
-
-            if (savedCountry) {
-                countrySelect.value = savedCountry; 
-                updateDistricts(); 
-
-                if (savedDistrict) {
-                    const districtSelect = document.getElementById("districtSelect");
-                    districtSelect.value = savedDistrict; 
-                    updateCoordinates();
-                }
-            } else {
-                updateDistricts();
+        function initializeMap() {
+            if (!map) {
+                map = L.map('map').setView([LATITUDE, LONGITUDE], 8);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+                marker = L.marker([LATITUDE, LONGITUDE]).addTo(map);
+                map.on('click', e => updateCoordinatesFromMap(e.latlng.lat, e.latlng.lng));
             }
         }
 
+        function updateCoordinatesFromMap(lat, lon) {
+            isMapMode = true;
+            LATITUDE = lat;
+            LONGITUDE = lon;
+            localStorage.setItem('latitude', lat);
+            localStorage.setItem('longitude', lon);
+            updateMap(LATITUDE, LONGITUDE);
+            document.getElementById('la').textContent = `Latitude: ${LATITUDE.toFixed(4)}`;
+            document.getElementById('long').textContent = `Longitude: ${LONGITUDE.toFixed(4)}`;
+            updateWeatherData();
+            getCityName(LATITUDE, LONGITUDE);
+        }
 
-    
+        function updateMap(lat, lon) {
+            if (map) {
+                map.setView([lat, lon], 8);
+                marker.setLatLng([lat, lon]);
+            }
+        }
+        
+        function populateCountries() {
+            isMapMode = false;
+            const countrySelect = document.getElementById("countrySelect");
+            countrySelect.innerHTML = "";
+            Object.keys(locationData).forEach(country => {
+                const option = new Option(country, country);
+                countrySelect.add(option);
+            });
+            const savedCountry = localStorage.getItem('selectedCountry') || 'Malaysia';
+            const savedDistrict = localStorage.getItem('selectedDistrict') || 'Johor';
+            countrySelect.value = savedCountry;
+            updateDistricts();
+            document.getElementById("districtSelect").value = savedDistrict;
+            updateCoordinates();
+        }
+
         function updateDistricts() {
+            isMapMode = false;
             const countrySelect = document.getElementById("countrySelect");
             const districtSelect = document.getElementById("districtSelect");
             const selectedCountry = countrySelect.value;
-            districtSelect.innerHTML = ""; 
-
-      
-            const districts = Object.keys(locationData[selectedCountry]);
-            districts.forEach(district => {
-                const option = document.createElement("option");
-                option.value = district;
-                option.textContent = district;
-                districtSelect.appendChild(option);
+            districtSelect.innerHTML = "";
+            Object.keys(locationData[selectedCountry]).forEach(district => {
+                const option = new Option(district, district);
+                districtSelect.add(option);
             });
-
-            updateCoordinates(); 
+            updateCoordinates();
         }
-
 
         function updateCoordinates() {
-            const countrySelect = document.getElementById("countrySelect").value;
-            const districtSelect = document.getElementById("districtSelect").value;
-
-
-            const selectedLocation = locationData[countrySelect][districtSelect];
-            LATITUDE = selectedLocation.lat;
-            LONGITUDE = selectedLocation.lon;
-
- 
-            document.querySelector('.city-name').textContent = `${districtSelect}`;
-
-     
-            localStorage.setItem('selectedCountry', countrySelect);
-            localStorage.setItem('selectedDistrict', districtSelect);
-
-      
-            updateWeatherData(); 
+            if (isMapMode) return;
+            const country = document.getElementById("countrySelect").value;
+            const district = document.getElementById("districtSelect").value;
+            const loc = locationData[country][district];
+            LATITUDE = loc.lat;
+            LONGITUDE = loc.lon;
+            localStorage.setItem('latitude', LATITUDE);
+            localStorage.setItem('longitude', LONGITUDE);
+            localStorage.setItem('selectedCountry', country);
+            localStorage.setItem('selectedDistrict', district);
+            document.getElementById('la').textContent = `Latitude: ${LATITUDE.toFixed(4)}`;
+            document.getElementById('long').textContent = `Longitude: ${LONGITUDE.toFixed(4)}`;
+            document.querySelector('.city-name').textContent = `City Name: ${district}`;
+            updateMap(LATITUDE, LONGITUDE);
+            updateWeatherData();
+            getCityName(LATITUDE, LONGITUDE);
         }
 
+        window.onload = function() {
+            initializeMap();
+            populateCountries();
+            setupNotificationButton();
+        };
+        
+        function setupNotificationButton() {
+            const btn = document.getElementById('enable-notifications-btn');
+            if (!('Notification' in window)) {
+                btn.textContent = 'Notifications Not Supported';
+                btn.disabled = true;
+                return;
+            }
 
+            if (Notification.permission !== 'default') {
+                btn.style.display = 'none';
+            }
 
-     
-        window.onload = populateCountries;
+            btn.addEventListener('click', () => {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        new Notification('CropNavigator', { body: 'Desktop notifications are enabled!' });
+                        btn.style.display = 'none';
+                    }
+                });
+            });
+        }
 
-        const cloudApiKey = '2333e504168600096e7771d6606ef472'; 
-        const precipApiKey = 'a8af15b190744930957121828242509'; 
-        const weatherApiKey = '9b7bb83635a4ccfc33384b4f1c1d99cb'; 
-        const airQualityApiKey = '7375b706137d707308c4d0f68b247844'; 
+        function sendNotification(message, level = 'warning') {
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = `notification ${level}`;
+            notification.innerHTML = `<span>${message}</span><span class="notification-close" onclick="this.parentElement.remove();">&times;</span>`;
+            container.appendChild(notification);
 
-        let precipitationAmount = 0; 
+            if ('Notification' in window && Notification.permission === 'granted') {
+                const title = `CropNavigator ${level.charAt(0).toUpperCase() + level.slice(1)}`;
+                const options = {
+                    body: message,
+                    icon: 'https://i.imgur.com/gJ4sV2T.png'
+                };
+                new Notification(title, options);
+            }
+        }
+
+        function clearNotifications() {
+            document.getElementById('notification-container').innerHTML = '';
+        }
+
+        const cloudApiKey = '2333e504168600096e7771d6606ef472';
+        const precipApiKey = 'a8af15b190744930957121828242509';
+        const weatherApiKey = '9b7bb83635a4ccfc33384b4f1c1d99cb';
+        const airQualityApiKey = '7375b706137d707308c4d0f68b247844';
+        const geocodingApiKey = '9b7bb83635a4ccfc33384b4f1c1d99cb';
+
+        async function getCityName(lat, lon) {
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${geocodingApiKey}`;
+            try {
+                const data = await (await fetch(url)).json();
+                if (data.name) {
+                    document.querySelector('.city-name').textContent = `City Name: ${data.name}`;
+                } else {
+                    document.querySelector('.city-name').textContent = 'City Name: Not Found';
+                }
+            } catch (error) {
+                document.querySelector('.city-name').textContent = 'City Name: Error';
+            }
+        }
 
         async function getCloudData() {
             const url = `https://api.openweathermap.org/data/2.5/weather?lat=${LATITUDE}&lon=${LONGITUDE}&appid=${cloudApiKey}`;
             try {
-                const response = await fetch(url);
-                const data = await response.json();
+                const data = await (await fetch(url)).json();
                 const cloudiness = data.clouds.all;
-                document.getElementById('cloudPercentage').textContent = `${cloudiness}%`; 
-            } catch (error) {
-                document.getElementById('cloudPercentage').textContent = 'Error fetching cloud data.';
-                console.error('Error:', error);
-            }
+                document.getElementById('cloudPercentage').textContent = `${cloudiness}%`;
+                if (cloudiness >= 80) sendNotification(`High Cloudiness (${cloudiness}%): Overcast skies. Reduce watering.`, 'warning');
+                else if (cloudiness <= 20) sendNotification(`Low Cloudiness (${cloudiness}%): Clear skies. Monitor for crop drying.`, 'warning');
+            } catch (error) { document.getElementById('cloudPercentage').textContent = 'Error'; }
         }
 
         async function getPrecipitationData() {
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&daily=precipitation_sum&forecast_days=1`;
             try {
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        const precipitation = data.daily.precipitation_sum[0];
-                        document.getElementById('precipitationAmount').textContent = `${precipitation} mm/day`; 
-                    })
-
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                document.getElementById('precipitationAmount').textContent = `Error fetching precipitation data: ${error.message}`;
-            }
+                const data = await (await fetch(url)).json();
+                const precipitation = data.daily.precipitation_sum[0];
+                document.getElementById('precipitationAmount').textContent = `${precipitation} mm/day`;
+                if (precipitation >= 20) sendNotification(`Very High Daily Rain (${precipitation} mm): Flood risk.`, 'alert');
+                else if (precipitation >= 10) sendNotification(`High Daily Rain (${precipitation} mm): Check for waterlogging.`, 'warning');
+            } catch (error) { document.getElementById('precipitationAmount').textContent = 'Error'; }
         }
+        
         async function gethourPrecipitationData() {
             const url = `https://api.weatherapi.com/v1/current.json?key=${precipApiKey}&q=${LATITUDE},${LONGITUDE}`;
             try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                precipitationAmounthour = data.current.precip_mm; 
-                document.getElementById('precipitationAmounthour').textContent = `${precipitationAmounthour} mm/hr`; 
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                document.getElementById('precipitationAmounthour').textContent = `Error fetching precipitation data: ${error.message}`;
-            }
+                const data = await (await fetch(url)).json();
+                const precipitationAmounthour = data.current.precip_mm;
+                document.getElementById('precipitationAmounthour').textContent = `${precipitationAmounthour} mm/hr`;
+                if (precipitationAmounthour >= 10) sendNotification(`Intense Hourly Rain (${precipitationAmounthour} mm/hr): Flood risk imminent.`, 'alert');
+                else if (precipitationAmounthour >= 5) sendNotification(`High Hourly Rain (${precipitationAmounthour} mm/hr): Watch for waterlogging.`, 'warning');
+            } catch (error) { document.getElementById('precipitationAmounthour').textContent = 'Error'; }
         }
+        
         async function getWeatherData() {
             const url = `https://api.openweathermap.org/data/2.5/weather?lat=${LATITUDE}&lon=${LONGITUDE}&appid=${weatherApiKey}&units=metric`;
             try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                const temperature = data.main.temp; 
-                const description = data.weather[0].description; 
-                document.getElementById('temperature').textContent = `Temperature: ${temperature}°C`; 
-                document.getElementById('weatherCondition').textContent = `Condition: ${description}`;
+                const data = await (await fetch(url)).json();
+                document.getElementById('temperature').textContent = `Temperature: ${data.main.temp}°C`;
+                document.getElementById('weatherCondition').textContent = `Condition: ${data.weather[0].description}`;
             } catch (error) {
-                console.error("Error fetching weather data:", error);
-                document.getElementById('weatherCondition').textContent = `Error fetching weather data: ${error.message}`;
+                document.getElementById('temperature').textContent = 'Temp: Error';
+                document.getElementById('weatherCondition').textContent = 'Condition: Error';
             }
         }
 
         async function getAirQualityData() {
             const url = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${LATITUDE}&lon=${LONGITUDE}&appid=${airQualityApiKey}`;
             try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await (await fetch(url)).json();
+                const aqi = data.list[0].main.aqi;
+                document.getElementById('airQuality').textContent = `AQI: ${aqi}`;
+                if (aqi >= 4) {
+                    const level = aqi === 4 ? 'Poor' : 'Hazardous';
+                    sendNotification(`Air Quality is ${level} (AQI: ${aqi}). Protect sensitive plants.`, 'alert');
                 }
-                const data = await response.json();
-                const aqi = data.list[0].main.aqi; 
-                document.getElementById('airQuality').textContent = `Air Quality Index: ${aqi}`; 
-            } catch (error) {
-                console.error("Error fetching air quality data:", error);
-                document.getElementById('airQuality').textContent = `Error fetching air quality data: ${error.message}`;
-            }
+            } catch (error) { document.getElementById('airQuality').textContent = 'AQI: Error'; }
         }
 
-        async function fetchSoilMoisture(currentHour) {
-            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&hourly=soil_moisture_9_to_27cm&timezone=auto`)
-                .then(response => response.json())
-                .then(data => {
-                    const times = data.hourly.time; 
-                    const soilMoistures = data.hourly.soil_moisture_9_to_27cm; 
-                    const displayDiv = document.getElementById('soilMoistureDisplay');
-                    displayDiv.innerHTML = '';
-
-           
-                    const currentHourIndex = times.findIndex(time => {
-                        const date = new Date(time);
-                        return date.getUTCFullYear() === currentHour.getUTCFullYear() &&
-                               date.getUTCMonth() === currentHour.getUTCMonth() &&
-                               date.getUTCDate() === currentHour.getUTCDate() &&
-                               date.getUTCHours() === currentHour.getUTCHours();
-                    });
-
-                    if (currentHourIndex !== -1) {
-                        displayDiv.textContent = `${soilMoistures[currentHourIndex].toFixed(3)} m³/m³`; 
-                    } else {
-                   
-                        displayDiv.textContent = "No data available for the current UTC hour.";
-                        displayDiv.classList.add('no-data');
-                    }
-                })
-                .catch(error => console.error('Error fetching soil moisture data:', error));
-        }
-
- 
-        async function fetchEvapotranspiration() {
-            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&daily=et0_fao_evapotranspiration&forecast_days=1`)
-                .then(response => response.json())
-                .then(data => {
-                    const etValue = data.daily.et0_fao_evapotranspiration[0];
-                    document.getElementById('evapotranspirationDisplay').innerHTML = `${etValue} mm/day`;
-                })
-                .catch(error => console.error('Error fetching evapotranspiration data:', error));
-        }
-        async function fetchEvapotranspirationhour(currentHour) {
+        async function fetchSoilMoisture() {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&hourly=soil_moisture_9_to_27cm&timezone=auto`;
             try {
-                if (!currentHour) {
-                    console.warn('currentHour is undefined. Using current UTC time as fallback.');
-                    currentHour = new Date(); 
-                    currentHour = new Date(Date.UTC(
-                        currentHour.getUTCFullYear(),
-                        currentHour.getUTCMonth(),
-                        currentHour.getUTCDate(),
-                        currentHour.getUTCHours(),
-                        currentHour.getUTCMinutes(),
-                        currentHour.getUTCSeconds()
-                    ));
-                }
-
-                console.log('Current UTC Hour:', currentHour.toISOString());
-
-                const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&hourly=evapotranspiration&forecast_days=1&timezone=auto`);
-                const data = await response.json();
-                
-                // Log the entire API response
-                console.log('API Response:', data);
-
-                const times = data.hourly.time; 
-                const evapotranspirations = data.hourly.evapotranspiration; 
-                const displayDiv = document.getElementById('evapotranspirationDisplayhour');
-                displayDiv.innerHTML = ''; 
-
-                const currentHourIndex = times.findIndex(time => {
-                    if (time && !isNaN(Date.parse(time))) {
-                        const date = new Date(time); 
-
-                        return date.getUTCFullYear() === currentHour.getUTCFullYear() &&
-                            date.getUTCMonth() === currentHour.getUTCMonth() &&
-                            date.getUTCDate() === currentHour.getUTCDate() &&
-                            date.getUTCHours() === currentHour.getUTCHours();
-                    } else {
-                        console.error('Invalid time value:', time);
-                        return false;
-                    }
-                });
-
+                const data = await (await fetch(url)).json();
+                const now = new Date();
+                const currentHourIndex = data.hourly.time.findIndex(time => time.startsWith(now.toISOString().slice(0, 13)));
                 if (currentHourIndex !== -1) {
-                    displayDiv.textContent = `${evapotranspirations[currentHourIndex].toFixed(3)} mm/hr`; // Display only the evapotranspiration value
-                } else {
-                    displayDiv.textContent = "No data available for the current UTC hour.";
-                    displayDiv.classList.add('no-data');
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+                    const moisture = data.hourly.soil_moisture_9_to_27cm[currentHourIndex];
+                    document.getElementById('soilMoistureDisplay').textContent = `${moisture.toFixed(3)} m³/m³`;
+                    if (moisture <= 0.1) sendNotification(`Soil is Very Dry (${moisture.toFixed(3)} m³/m³). Water immediately.`, 'alert');
+                    else if (moisture >= 0.4) sendNotification(`Soil is Waterlogged (${moisture.toFixed(3)} m³/m³). Ensure drainage.`, 'alert');
+                } else { document.getElementById('soilMoistureDisplay').textContent = "No data"; }
+            } catch (error) { document.getElementById('soilMoistureDisplay').textContent = "Error"; }
         }
 
-        function updateEvapotranspiration() {
-            const currentUTCDate = new Date();
-            fetchEvapotranspirationhour(currentUTCDate); 
+        async function fetchEvapotranspiration() {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&daily=et0_fao_evapotranspiration&forecast_days=1`;
+            try {
+                const data = await (await fetch(url)).json();
+                const etValue = data.daily.et0_fao_evapotranspiration[0];
+                document.getElementById('evapotranspirationDisplay').innerHTML = `${etValue} mm/day`;
+                if (etValue >= 7) sendNotification(`Very High Daily ET (${etValue} mm): Critical water need.`, 'alert');
+                else if (etValue <= 1) sendNotification(`Very Low Daily ET (${etValue} mm): Crops may need watering.`, 'warning');
+            } catch (error) { document.getElementById('evapotranspirationDisplay').innerHTML = 'Error'; }
         }
+        
+        async function fetchEvapotranspirationhour() {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&hourly=evapotranspiration&forecast_days=1&timezone=auto`;
+            try {
+                const data = await (await fetch(url)).json();
+                const now = new Date();
+                const currentHourIndex = data.hourly.time.findIndex(time => time.startsWith(now.toISOString().slice(0, 13)));
+                if (currentHourIndex !== -1) {
+                    const etHourValue = data.hourly.evapotranspiration[currentHourIndex];
+                    document.getElementById('evapotranspirationDisplayhour').textContent = `${etHourValue.toFixed(3)} mm/hr`;
+                    if (etHourValue >= 0.7) sendNotification(`Very High Hourly ET (${etHourValue.toFixed(3)} mm/hr): Critical water need.`, 'alert');
+                } else { document.getElementById('evapotranspirationDisplayhour').textContent = 'No data'; }
+            } catch (error) { document.getElementById('evapotranspirationDisplayhour').textContent = 'Error'; }
+        }
+
         function updateUTCtime() {
-        const currentUTCDate = new Date();
-        document.getElementById('time').textContent = currentUTCDate.toUTCString(); 
-    }
+            document.getElementById('time').textContent = new Date().toUTCString().slice(5, -4);
+        }
 
+        function updateWeatherData() {
+            clearNotifications();
+            getCityName(LATITUDE, LONGITUDE);
+            gethourPrecipitationData();
+            getCloudData();
+            getPrecipitationData();
+            getWeatherData();
+            getAirQualityData();
+            fetchSoilMoisture();
+            fetchEvapotranspiration();
+            fetchEvapotranspirationhour();
+        }
 
-    function updateWeatherData() {
-        gethourPrecipitationData();
-        getCloudData();
-        getPrecipitationData();
-        getWeatherData();
-        getAirQualityData();
-        fetchSoilMoisture(new Date()); 
-        fetchEvapotranspiration(); 
-        fetchEvapotranspirationhour();
-    }
-
-    setInterval(updateEvapotranspiration, 60000); 
-    setInterval(updateWeatherData, 60000);
-    setInterval(updateUTCtime, 1000); 
-    updateWeatherData(); 
-    updateUTCtime(); 
+        setInterval(updateWeatherData, 60000);
+        setInterval(updateUTCtime, 1000);
     </script>
 </body>
 </html>

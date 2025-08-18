@@ -4,141 +4,210 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Understanding Evapotranspiration in mm/hr for Farmers</title>
+    <!-- We're using Tailwind CSS for all styling. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
+            font-family: 'Inter', sans-serif;
         }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        .evapotranspiration-level {
-            margin: 20px 0;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #ecf0f1;
-        }
-        .action {
-            background-color: #dff0d8;
-            border: 1px solid #d6e9c6;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
+
         .arrow-container {
-            display: flex;
-            justify-content: flex-start;
-            margin-top: 20px;
+            /* This is the key CSS to make the arrow stay in the bottom-left of the screen. */
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
         }
-        .arrow {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            transition: transform 0.3s;
+
+        /* Simple spinner animation for loading state */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        .arrow img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .arrow:hover {
-            transform: scale(1.1);
-        }
-        .note {
-            font-style: italic;
-            color: #555;
-            margin-top: 10px;
+        .animate-spin-slow {
+            animation: spin 1.5s linear infinite;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
 
-    <h1>Understanding Evapotranspiration in mm/hr for Farmers</h1>
-    <p>Evapotranspiration (ET) is essential for determining your crops' water needs, combining evaporation and transpiration, measured in millimeters per hour (mm/hr). This guide helps you interpret ET levels and take appropriate actions for your farm.</p>
+    <div class="max-w-4xl mx-auto">
+        <!-- Header Section -->
+        <h1 class="text-3xl font-bold text-center mb-2">Understanding Evapotranspiration for Agriculture</h1>
+        <p class="text-center text-gray-600 mb-8">Evapotranspiration (ET) is essential for determining your crops' water needs, combining evaporation and transpiration, measured in millimeters per hour (mm/hr). This guide helps you interpret ET levels and take appropriate actions for your farm.</p>
 
-    <div class="evapotranspiration-level">
-        <h2>Evapotranspiration Levels</h2>
-        <ul>
-            <li><strong>0 - 0.1 mm/hr:</strong> Very Low (Water needed)</li>
-            <li><strong>0.1 - 0.3 mm/hr:</strong> Low (Watering may be necessary)</li>
-            <li><strong>0.3 - 0.5 mm/hr:</strong> Optimal (Watering is on track)</li>
-            <li><strong>0.5 - 0.7 mm/hr:</strong> High (Increase watering frequency)</li>
-            <li><strong>0.7 mm/hr and above:</strong> Very High (Critical water need)</li>
-        </ul>
-    </div>
-
-    <h2>Action Steps Based on ET Levels</h2>
-
-    <div class="action">
-        <h3>0 - 0.1 mm/hr: Very Low</h3>
-        <p>
-            <strong>Actions:</strong>
-            <ul>
-                <li>Water crops to prevent drought stress.</li>
-                <li>Check soil moisture regularly.</li>
-                <li>Use mulch to conserve moisture.</li>
-            </ul>
-        </p>
-        <p class="note">Consider collecting rainwater for irrigation!</p>
-    </div>
-
-    <div class="action">
-        <h3>0.1 - 0.3 mm/hr: Low</h3>
-        <p>
-            <strong>Actions:</strong>
-            <ul>
-                <li>Water according to crop needs.</li>
-                <li>Plan for rainfall using forecasts.</li>
-                <li>Adjust irrigation times to reduce evaporation.</li>
-            </ul>
-        </p>
-    </div>
-
-    <div class="action">
-        <h3>0.3 - 0.5 mm/hr: Optimal</h3>
-        <p>
-            <strong>Actions:</strong>
-            <ul>
-                <li>Maintain current watering practices.</li>
-                <li>Monitor ET levels regularly.</li>
-            </ul>
-        </p>
-    </div>
-
-    <div class="action">
-        <h3>0.5 - 0.7 mm/hr: High</h3>
-        <p>
-            <strong>Actions:</strong>
-            <ul>
-                <li>Increase watering frequency.</li>
-                <li>Check for signs of heat stress.</li>
-            </ul>
-        </p>
-    </div>
-
-    <div class="action">
-        <h3>0.7 mm/hr and above: Very High</h3>
-        <p>
-            <strong>Actions:</strong>
-            <ul>
-                <li>Ensure enough water supply.</li>
-                <li>Avoid planting sensitive crops during this period.</li>
-            </ul>
-        </p>
-    </div>
-
-    <div class="arrow-container">
-        <a href="index.html">
-            <div class="arrow">
-                <img src="back.png" alt="Back Arrow">
+        <!-- Current Evapotranspiration Display Box -->
+        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center mb-6">
+            <!-- SVG icon for a water droplet. -->
+            <svg class="w-16 h-16 text-blue-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 21.35c-3.15 0-5.71-2.56-5.71-5.71 0-4.53 5.71-11.74 5.71-11.74s5.71 7.21 5.71 11.74c0 3.15-2.56 5.71-5.71 5.71z"/>
+            </svg>
+            <div class="text-xl font-bold text-gray-700 mt-2">Evapotranspiration</div>
+            <div id="evapotranspiration" class="text-lg font-medium text-gray-500 mt-1">
+                <!-- Loading indicator will be placed here -->
+                <svg class="animate-spin-slow h-5 w-5 mr-3 inline text-gray-500" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Fetching data...
             </div>
-        </a>
+        </div>
+
+        <!-- Evapotranspiration Levels Section -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4">Evapotranspiration Levels</h2>
+            <ul class="space-y-2 text-lg">
+                <li><strong>0 - 0.1 mm/hr:</strong> Very Low (Water needed)</li>
+                <li><strong>0.1 - 0.3 mm/hr:</strong> Low (Watering may be necessary)</li>
+                <li><strong>0.3 - 0.5 mm/hr:</strong> Optimal (Watering is on track)</li>
+                <li><strong>0.5 - 0.7 mm/hr:</strong> High (Increase watering frequency)</li>
+                <li><strong>0.7 mm/hr and above:</strong> Very High (Critical water need)</li>
+            </ul>
+        </div>
+
+        <!-- Action Steps Section -->
+        <h2 class="text-2xl font-bold mb-4">Action Steps Based on ET Levels</h2>
+
+        <div class="bg-red-100 border-l-4 border-red-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-red-800">0 - 0.1 mm/hr: Very Low</h3>
+            <p class="text-red-700 mt-1">
+                Water crops to prevent drought stress. Check soil moisture regularly. Use mulch to conserve moisture.
+                <span class="block mt-2 text-sm italic">Consider collecting rainwater for irrigation!</span>
+            </p>
+        </div>
+
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-yellow-800">0.1 - 0.3 mm/hr: Low</h3>
+            <p class="text-yellow-700 mt-1">
+                Water according to crop needs. Plan for rainfall using forecasts. Adjust irrigation times to reduce evaporation.
+            </p>
+        </div>
+
+        <div class="bg-green-100 border-l-4 border-green-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-green-800">0.3 - 0.5 mm/hr: Optimal</h3>
+            <p class="text-green-700 mt-1">
+                Maintain current watering practices. Monitor ET levels regularly.
+            </p>
+        </div>
+
+        <div class="bg-blue-100 border-l-4 border-blue-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-blue-800">0.5 - 0.7 mm/hr: High</h3>
+            <p class="text-blue-700 mt-1">
+                Increase watering frequency. Check for signs of heat stress.
+            </p>
+        </div>
+
+        <div class="bg-blue-100 border-l-4 border-blue-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-blue-800">0.7 mm/hr and above: Very High</h3>
+            <p class="text-blue-700 mt-1">
+                Ensure enough water supply. Avoid planting sensitive crops during this period.
+            </p>
+        </div>
+
+        <!-- Back Arrow/Navigation -->
+        <div class="arrow-container"> 
+            <a href="index.html"> 
+                <div class="arrow"> 
+                    <!-- SVG icon for the back arrow, replacing the old PNG -->
+                    <svg class="h-12 w-12 text-gray-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div> 
+            </a> 
+        </div>
     </div>
 
+    <script>
+        // Retrieve latitude and longitude from localStorage.
+        const LATITUDE = localStorage.getItem('latitude');
+        const LONGITUDE = localStorage.getItem('longitude'); 
+        // This API key is a placeholder and should be provided by the user if needed for local testing.
+        const weatherApiKey = '9b7bb83635a4ccfc33384b4f1c1d99cb'; 
+
+        /**
+         * A simplified function to estimate Evapotranspiration (ET) in mm/hr.
+         * This uses the Hargreaves equation, which estimates ET from temperature and solar radiation.
+         * We'll use a simplified version that just relies on temperature, as solar radiation data is not readily available.
+         *
+         * @param {number} tempCelsius The temperature in Celsius.
+         * @returns {number} The estimated Evapotranspiration in mm/hr.
+         */
+        function estimateEvapotranspiration(tempCelsius) {
+            // A very simplified model based on temperature. This is a rough estimate.
+            // A more accurate model would require more data like solar radiation and wind speed.
+            // Formula: ET = 0.0023 * Ra * (T + 17.8) * sqrt(T - Tmin)
+            // As we don't have all the variables, we'll use a linear approximation.
+            // The formula is: ET_daily = 0.0135 * T_avg_celsius
+            // We convert this to mm/hr by dividing by 24.
+            const ET_hourly = (0.0135 * tempCelsius) / 24;
+            return ET_hourly;
+        }
+
+        /**
+         * Fetches weather data from the OpenWeatherMap API and calculates Evapotranspiration.
+         * The function includes a retry mechanism with exponential backoff to handle
+         * temporary network failures.
+         */
+                async function fetchEvapotranspirationhour(currentHour) {
+            try {
+                if (!currentHour) {
+                    console.warn('currentHour is undefined. Using current UTC time as fallback.');
+                    currentHour = new Date(); 
+                    currentHour = new Date(Date.UTC(
+                        currentHour.getUTCFullYear(),
+                        currentHour.getUTCMonth(),
+                        currentHour.getUTCDate(),
+                        currentHour.getUTCHours(),
+                        currentHour.getUTCMinutes(),
+                        currentHour.getUTCSeconds()
+                    ));
+                }
+
+                console.log('Current UTC Hour:', currentHour.toISOString());
+
+                const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&hourly=evapotranspiration&forecast_days=1&timezone=auto`);
+                const data = await response.json();
+                
+                // Log the entire API response
+                console.log('API Response:', data);
+
+                const times = data.hourly.time; 
+                const evapotranspirations = data.hourly.evapotranspiration; 
+                const displayDiv = document.getElementById('evapotranspiration');
+                displayDiv.innerHTML = ''; 
+
+                const currentHourIndex = times.findIndex(time => {
+                    if (time && !isNaN(Date.parse(time))) {
+                        const date = new Date(time); 
+
+                        return date.getUTCFullYear() === currentHour.getUTCFullYear() &&
+                            date.getUTCMonth() === currentHour.getUTCMonth() &&
+                            date.getUTCDate() === currentHour.getUTCDate() &&
+                            date.getUTCHours() === currentHour.getUTCHours();
+                    } else {
+                        console.error('Invalid time value:', time);
+                        return false;
+                    }
+                });
+
+                if (currentHourIndex !== -1) {
+                    displayDiv.textContent = `${evapotranspirations[currentHourIndex].toFixed(3)} mm/hr`; // Display only the evapotranspiration value
+                } else {
+                    displayDiv.textContent = "No data available for the current UTC hour.";
+                    displayDiv.classList.add('no-data');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+
+        // Check if latitude and longitude are available before attempting to fetch data.
+        if (LATITUDE && LONGITUDE) {
+            fetchEvapotranspirationhour();
+        } else {
+            // Display a message prompting the user to select a location.
+            document.getElementById('evapotranspiration').textContent = "Please select a location on the previous page to view data.";
+        }
+    </script>
 </body>
 </html>

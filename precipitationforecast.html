@@ -4,175 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Precipitation Forecast Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f0f4f7;
+            font-family: 'Inter', sans-serif;
         }
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-        }
-        .selectcontainer {
-            display: grid;
-            grid-template-rows: auto 1fr 3fr;
-            width: 100vw;
-            height: 100vh;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        .precipitation-data {
-            font-size: 16px;
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f7f7f7;
-        }
-        .advice {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #eaf4ea;
-            border: 1px solid #b2d8b2;
-            border-radius: 8px;
-            color: #2e7d32;
-        }
-        .error {
-            color: red;
-            text-align: center;
-        }
-        .dropdown-container {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .dropdown-container label {
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        select {
-            padding: 10px;
-            margin-right: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        select:focus {
-            border-color: #007bff;
-        }
-        #chart-container {
-            width: 100%;
-            height: 400px;
-            display: flex;
-            justify-content: center;  
-            align-items: center;    
-            margin-top: 30px;
-        }
+
+        /* Fixed position for the back arrow, a common mobile pattern */
         .arrow-container {
-            display: flex;
-            justify-content: flex-start;
-            margin-top: 20px;
-        }
-        .arrow {
-            width: 50px;
-            height: 50px;
-            background-color: transparent;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            transition: transform 0.3s;
-        }
-        .arrow img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .arrow:hover {
-            transform: scale(1.1);
-        }
-        #downloadBtn {
-            background-color: #007bff; 
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            display: block; 
-            margin: 20px auto; 
-            text-align: center;
-        }
-        #downloadBtn:hover {
-            background-color: #0056b3; 
-            transform: scale(1.05); 
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 10;
         }
     </style>
 </head>
-<body>
-    <div class="selectcontainer">
-        <div class="dropdown-container">
-            <label for="countrySelect">Select Country:</label>
-            <select id="countrySelect" onchange="updateDistricts()">
-             
-            </select>
-            
-            <label for="districtSelect">Select District:</label>
-            <select id="districtSelect" onchange="updateCoordinates()">
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
 
-            </select>
-        </div>
-        <div class="container">
-            <h1>Precipitation Data for Farmers</h1>
-            <p>Understanding precipitation levels helps you manage irrigation effectively. Below is the daily precipitation data for your farm location, along with advice on watering based on precipitation levels.</p>
-            
-            <div id="precipitationData" class="precipitation-data">Loading precipitation data...</div>
-
-            <div id="advice" class="advice"></div>
-            <div id="chart-container">
-                <canvas id="preciChart"></canvas>
+    <div class="max-w-4xl mx-auto flex flex-col min-h-screen">
+        <div class="flex-grow">
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8 mb-8">
+                <div class="flex items-center space-x-2">
+                    <label for="countrySelect" class="font-bold">Select Country:</label>
+                    <select id="countrySelect" onchange="updateDistricts()" class="p-2 border rounded-md">
+                        </select>
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <label for="districtSelect" class="font-bold">Select District:</label>
+                    <select id="districtSelect" onchange="updateCoordinates()" class="p-2 border rounded-md">
+                        </select>
+                </div>
             </div>
-            
-            <button id="downloadBtn">Download Chart as PNG</button>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h1 class="text-3xl font-bold text-center mb-2">Precipitation Data</h1>
+                <p class="text-center text-gray-600 mb-6">Understanding precipitation levels helps you manage irrigation effectively. Below is the daily data for your location, along with watering advice.</p>
+                
+                <div id="precipitationDataContainer" class="bg-white rounded-xl shadow-inner p-4 border border-gray-200">
+                    <div id="precipitationData" class="text-lg text-gray-700">Loading precipitation data...</div>
+                    <div id="advice" class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 mt-4 rounded-lg hidden"></div>
+                </div>
+
+                <div id="chart-container" class="w-full h-80 flex items-center justify-center mt-6">
+                    <canvas id="preciChart"></canvas>
+                </div>
+                
+                <button id="downloadBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300 block mx-auto mt-6">
+                    Download Chart as PNG
+                </button>
+            </div>
         </div>
+        
         <div class="arrow-container">
             <a href="index.html">
-                <div class="arrow">
-                    <img src="back.png" alt="Back to Home">
+                <div class="h-12 w-12 bg-white rounded-full shadow-lg flex items-center justify-center transition-transform duration-200 hover:scale-110">
+                    <svg class="h-8 w-8 text-gray-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
             </a>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
- 
-        const locationData = {
+        // Placeholder for your location data. You can expand this as needed.
+         const locationData = {
 "Afghanistan": {
     "Badakhshan": {"lat": 36.6594, "lon": 70.1269},
     "Badghis": {"lat": 35.1618, "lon": 63.4508},
@@ -3254,16 +3152,15 @@
 
         };
 
-        let LATITUDE = 36.6594; 
-        let LONGITUDE = 70.1269;
+        let LATITUDE = localStorage.getItem('latitude') || 36.6594;
+        let LONGITUDE = localStorage.getItem('longitude') || 70.1269;
+        
         let preciChart;
 
-       
         function populateCountries() {
             const countrySelect = document.getElementById("countrySelect");
-            countrySelect.innerHTML = ""; 
-
-        
+            countrySelect.innerHTML = "";
+            
             Object.keys(locationData).forEach(country => {
                 const option = document.createElement("option");
                 option.value = country;
@@ -3271,30 +3168,28 @@
                 countrySelect.appendChild(option);
             });
 
-       
             const savedCountry = localStorage.getItem('selectedCountry');
             const savedDistrict = localStorage.getItem('selectedDistrict');
 
-            if (savedCountry) {
-                countrySelect.value = savedCountry; 
-                updateDistricts(); 
-
-                if (savedDistrict) {
-                    const districtSelect = document.getElementById("districtSelect");
-                    districtSelect.value = savedDistrict; 
-                    updateCoordinates(); 
+            if (savedCountry && locationData[savedCountry]) {
+                countrySelect.value = savedCountry;
+                updateDistricts();
+                if (savedDistrict && locationData[savedCountry][savedDistrict]) {
+                    document.getElementById("districtSelect").value = savedDistrict;
+                    updateCoordinates();
+                } else {
+                    updateCoordinates();
                 }
             } else {
                 updateDistricts();
             }
         }
 
-
         function updateDistricts() {
             const countrySelect = document.getElementById("countrySelect");
             const districtSelect = document.getElementById("districtSelect");
             const selectedCountry = countrySelect.value;
-            districtSelect.innerHTML = ""; 
+            districtSelect.innerHTML = "";
 
             const districts = Object.keys(locationData[selectedCountry]);
             districts.forEach(district => {
@@ -3303,56 +3198,53 @@
                 option.textContent = district;
                 districtSelect.appendChild(option);
             });
-
-            updateCoordinates(); 
+            updateCoordinates();
         }
-
 
         function updateCoordinates() {
             const countrySelect = document.getElementById("countrySelect").value;
             const districtSelect = document.getElementById("districtSelect").value;
 
-
             const selectedLocation = locationData[countrySelect][districtSelect];
             LATITUDE = selectedLocation.lat;
             LONGITUDE = selectedLocation.lon;
 
-
+            localStorage.setItem('latitude', LATITUDE);
+            localStorage.setItem('longitude', LONGITUDE);
             localStorage.setItem('selectedCountry', countrySelect);
             localStorage.setItem('selectedDistrict', districtSelect);
 
-
-            fetchPrecipitationData(); 
+            fetchPrecipitationData();
         }
 
-
-        window.onload = populateCountries;
-
         function fetchPrecipitationData() {
+            document.getElementById('precipitationData').innerHTML = "Loading precipitation data...";
+            document.getElementById('advice').innerText = "";
+            document.getElementById('advice').classList.add('hidden');
+            
             const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&daily=precipitation_sum`;
+            
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
                     const precipitationData = data.daily.precipitation_sum;
                     const timeData = data.daily.time;
-                    let precipitationContent = '<table><tr><th>Date</th><th>Precipitation (mm)</th></tr>';
+                    
+                    let precipitationContent = '<table class="w-full text-left table-auto"><thead><tr><th class="p-2 border-b">Date</th><th class="p-2 border-b">Precipitation (mm)</th></tr></thead><tbody>';
                     let totalPrecipitation = 0;
-                    const labels = [];
-
+                    
                     precipitationData.forEach((precipitation, index) => {
                         const date = timeData[index];
-                        precipitationContent += `<tr><td>${date}</td><td>${precipitation.toFixed(2)}</td></tr>`;
+                        precipitationContent += `<tr class="border-b"><td>${date}</td><td>${precipitation.toFixed(2)}</td></tr>`;
                         totalPrecipitation += precipitation;
-                        labels.push(date); 
                     });
-
-                    precipitationContent += '</table>';
+                    
+                    precipitationContent += '</tbody></table>';
                     document.getElementById('precipitationData').innerHTML = precipitationContent;
-
 
                     const averagePrecipitation = totalPrecipitation / precipitationData.length;
                     let advice = '';
-
+                    
                     if (averagePrecipitation < 5) {
                         advice = 'Precipitation is low. Consider supplementing with irrigation.';
                     } else if (averagePrecipitation >= 5 && averagePrecipitation <= 15) {
@@ -3360,24 +3252,27 @@
                     } else {
                         advice = 'High precipitation detected. No need for irrigation for now.';
                     }
+                    
+                    const adviceElement = document.getElementById('advice');
+                    adviceElement.innerHTML = `<strong>Watering Advice:</strong> ${advice}`;
+                    adviceElement.classList.remove('hidden');
 
-                    document.getElementById('advice').innerHTML = `<strong>Watering Advice:</strong> ${advice}`;
-
-        
-                    updateChart(labels, precipitationData);
+                    updateChart(timeData, precipitationData);
                 })
                 .catch(error => {
                     console.error('Error fetching precipitation data:', error);
-                    document.getElementById('precipitationData').innerHTML = '<p class="error">Error fetching precipitation data. Please try again later.</p>';
+                    document.getElementById('precipitationData').innerHTML = '<p class="text-red-500 text-center">Error fetching precipitation data. Please try again later.</p>';
+                    document.getElementById('advice').classList.add('hidden');
                 });
         }
 
         function updateChart(labels, data) {
+            const ctx = document.getElementById('preciChart').getContext('2d');
+            
             if (preciChart) {
-                preciChart.destroy(); 
+                preciChart.destroy();
             }
 
-            const ctx = document.getElementById('preciChart').getContext('2d');
             preciChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -3389,9 +3284,12 @@
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1,
                         fill: true,
+                        tension: 0.3
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
                             beginAtZero: true,
@@ -3414,20 +3312,23 @@
                         },
                         tooltip: {
                             mode: 'index',
+                            intersect: false,
                         },
                     },
                 }
             });
         }
+
         function downloadChart() {
             const link = document.createElement('a');
             link.href = document.getElementById('preciChart').toDataURL('image/png');
-            link.download = 'precipitation_chart.png'; 
-            link.click(); 
+            link.download = 'precipitation_chart.png';
+            link.click();
         }
 
-
         document.getElementById('downloadBtn').addEventListener('click', downloadChart);
+
+        window.onload = populateCountries;
     </script>
 </body>
 </html>

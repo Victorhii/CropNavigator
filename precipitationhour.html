@@ -3,125 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Understanding Precipitation for Farmers (mm/hr)</title>
+    <title>Understanding Precipitation for Farmers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
+            font-family: 'Inter', sans-serif;
         }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        .precipitation-level {
-            margin: 20px 0;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #ecf0f1;
-        }
-        .action {
-            background-color: #dff0d8;
-            border: 1px solid #d6e9c6;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
+
         .arrow-container {
-            display: flex;
-            justify-content: flex-start;
-            margin-top: 20px;
+            /* This is the key CSS to make the arrow stay in the bottom-left of the screen. */
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
         }
-        .arrow {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            transition: transform 0.3s;
+
+        /* Simple spinner animation for loading state */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        .arrow img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .arrow:hover {
-            transform: scale(1.1);
-        }
-        .note {
-            font-style: italic;
-            color: #555;
-            margin-top: 10px;
+        .animate-spin-slow {
+            animation: spin 1.5s linear infinite;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
 
-    <h1>Understanding Precipitation for Farmers (mm/hr)</h1>
-    <p>Precipitation, measured in mm/hr, is vital for managing irrigation and crop health. This guide outlines various precipitation levels and recommended actions.</p>
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-2">Understanding Precipitation for Agriculture</h1>
+        <p class="text-center text-gray-600 mb-8">Precipitation, measured in millimeters per hour (mm/hr), is vital for managing irrigation and crop health. This guide helps you interpret precipitation levels and take appropriate actions for your farm.</p>
 
-    <div class="precipitation-level">
-        <h2>Precipitation Levels</h2>
-        <ul>
-            <li><strong>0 - 1 mm/hr:</strong> Very Low (Water as needed)</li>
-            <li><strong>1 - 2 mm/hr:</strong> Low (Monitor crop needs)</li>
-            <li><strong>2 - 5 mm/hr:</strong> Moderate (Good for crops)</li>
-            <li><strong>5 - 10 mm/hr:</strong> High (Potential for waterlogging)</li>
-            <li><strong>10 mm/hr and above:</strong> Very High (Flood risk)</li>
-        </ul>
-    </div>
-
-    <h2>Action Steps</h2>
-
-    <div class="action">
-        <h3>0 - 1 mm/hr: Very Low</h3>
-        <ul>
-            <li>Water crops as needed.</li>
-            <li>Regularly check soil moisture.</li>
-        </ul>
-        <p class="note">Consider water-efficient irrigation methods.</p>
-    </div>
-
-    <div class="action">
-        <h3>1 - 2 mm/hr: Low</h3>
-        <ul>
-            <li>Water crops based on needs.</li>
-            <li>Monitor weather forecasts.</li>
-        </ul>
-    </div>
-
-    <div class="action">
-        <h3>2 - 5 mm/hr: Moderate</h3>
-        <ul>
-            <li>Assess soil moisture levels.</li>
-            <li>Check crop health regularly.</li>
-        </ul>
-    </div>
-
-    <div class="action">
-        <h3>5 - 10 mm/hr: High</h3>
-        <ul>
-            <li>Ensure proper drainage systems.</li>
-            <li>Watch for signs of fungal diseases.</li>
-        </ul>
-    </div>
-
-    <div class="action">
-        <h3>10 mm/hr and above: Very High</h3>
-        <ul>
-            <li>Evaluate fields for flooding risks.</li>
-            <li>Implement erosion control measures.</li>
-        </ul>
-    </div>
-
-    <div class="arrow-container">
-        <a href="index.html">
-            <div class="arrow">
-                <img src="back.png" alt="Back Arrow">
+        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center mb-6">
+            <svg class="w-16 h-16 text-blue-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.5 18H16.14C15.86 19.34 14.65 20.35 13.2 20.35C11.75 20.35 10.54 19.34 10.26 18H8.5C6.01 18 4 15.99 4 13.5C4 11.01 6.01 9 8.5 9C8.84 9 9.17 9.04 9.5 9.11C10.04 7.02 11.97 5.5 14.33 5.5C17.47 5.5 20 8.03 20 11.17C20 12.01 19.82 12.84 19.47 13.62C19.78 13.91 20 14.28 20 14.67C20 15.17 19.8 15.65 19.45 16.03C19.8 16.41 20 16.89 20 17.39C20 18.23 19.56 19.01 18.89 19.51C18.22 20.01 17.41 20.24 16.58 20.18C15.75 20.11 15.02 19.74 14.47 19.14L13.5 18.17L12.5 17.17L11.5 16.17L10.5 15.17L9.5 14.17L8.5 13.17L7.5 12.17L6.5 11.17H5.5C5.01 11.17 4.56 11.39 4.25 11.72C3.94 12.05 3.75 12.49 3.75 13C3.75 13.51 3.94 13.95 4.25 14.28C4.56 14.61 5.01 14.83 5.5 14.83H6.5V16.5H5.5C4.01 16.5 2.5 15.48 2.5 13.5C2.5 11.96 3.01 10.59 4.09 9.51C4.7 8.89 5.48 8.44 6.35 8.16C7.22 7.89 8.13 7.79 9.03 7.87C9.93 7.95 10.8 8.21 11.58 8.63C12.35 9.05 13 9.65 13.5 10.37C14 9.65 14.65 9.05 15.42 8.63C16.19 8.21 17.06 7.95 17.96 7.87C18.86 7.79 19.77 7.89 20.64 8.16C21.51 8.44 22.29 8.89 22.9 9.51C23.99 10.59 24.5 11.96 24.5 13.5C24.5 15.99 22.49 18 20 18H17.5V18ZM11.5 20.35C11.5 20.9 11.36 21.43 11.08 21.91C10.81 22.39 10.43 22.79 9.95 23.09C9.47 23.39 8.93 23.57 8.38 23.63C7.83 23.68 7.28 23.62 6.75 23.44C6.22 23.26 5.73 22.96 5.33 22.56C4.94 22.16 4.63 21.67 4.45 21.14C4.27 20.61 4.21 20.06 4.26 19.51C4.31 18.96 4.49 18.42 4.77 17.94L4.77 17.94L11.5 20.35Z"/>
+            </svg>
+            <div class="text-xl font-bold text-gray-700 mt-2">Precipitation</div>
+            <div id="precipitation" class="text-lg font-medium text-gray-500 mt-1">
+                <svg class="animate-spin-slow h-5 w-5 mr-3 inline text-gray-500" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Fetching data...
             </div>
-        </a>
-    </div>
+        </div>
 
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4">Precipitation Levels</h2>
+            <ul class="space-y-2 text-lg">
+                <li><strong>0 - 1 mm/hr:</strong> Very Low (Water as needed)</li>
+                <li><strong>1 - 2 mm/hr:</strong> Low (Monitor crop needs)</li>
+                <li><strong>2 - 5 mm/hr:</strong> Moderate (Good for crops)</li>
+                <li><strong>5 - 10 mm/hr:</strong> High (Potential for waterlogging)</li>
+                <li><strong>10 mm/hr and above:</strong> Very High (Flood risk)</li>
+            </ul>
+        </div>
+
+        <h2 class="text-2xl font-bold mb-4">Action Steps Based on Precipitation</h2>
+        
+        <div class="bg-blue-100 border-l-4 border-blue-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-blue-800">0 - 1 mm/hr: Very Low</h3>
+            <p class="text-blue-700 mt-1">
+                Water crops as needed and regularly check soil moisture. Consider using water-efficient irrigation methods to conserve water.
+            </p>
+        </div>
+
+        <div class="bg-blue-100 border-l-4 border-blue-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-blue-800">1 - 2 mm/hr: Low</h3>
+            <p class="text-blue-700 mt-1">
+                Light rainfall. Water crops based on their specific needs and keep a close eye on weather forecasts to anticipate changes.
+            </p>
+        </div>
+
+        <div class="bg-green-100 border-l-4 border-green-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-green-800">2 - 5 mm/hr: Moderate</h3>
+            <p class="text-green-700 mt-1">
+                Good rainfall for crops. Assess soil moisture levels and check on crop health to ensure they are benefiting from the rain without being over-saturated.
+            </p>
+        </div>
+
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-yellow-800">5 - 10 mm/hr: High</h3>
+            <p class="text-yellow-700 mt-1">
+                Heavy rainfall. Ensure proper drainage systems are working to prevent waterlogging. Watch for signs of fungal diseases that can be promoted by wet conditions.
+            </p>
+        </div>
+
+        <div class="bg-red-100 border-l-4 border-red-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-red-800">10 mm/hr and above: Very High</h3>
+            <p class="text-red-700 mt-1">
+                Intense rainfall and potential flood risk. Evaluate fields for flooding and implement erosion control measures to protect your soil and crops.
+            </p>
+        </div>
+        
+        <div class="arrow-container"> 
+            <a href="index.html"> 
+                <div class="arrow"> 
+                    <svg class="h-12 w-12 text-gray-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div> 
+            </a> 
+        </div>
+    </div>
 </body>
+<script>
+    // Define API keys and get location data from localStorage
+    const precipApiKey = 'a8af15b190744930957121828242509'; 
+    const LATITUDE = localStorage.getItem('latitude');
+    const LONGITUDE = localStorage.getItem('longitude');
+
+    /**
+     * Fetches and displays the current precipitation data from WeatherAPI.
+     */
+    async function getHourlyPrecipitationData() {
+        const displayDiv = document.getElementById('precipitation');
+        
+        if (!LATITUDE || !LONGITUDE) {
+            displayDiv.textContent = "Please select a location on the previous page to view data.";
+            return;
+        }
+
+        // Display a loading indicator
+        displayDiv.innerHTML = `
+            <svg class="animate-spin-slow h-5 w-5 mr-3 inline text-gray-500" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Fetching data...
+        `;
+
+        const url = `https://api.weatherapi.com/v1/current.json?key=${precipApiKey}&q=${LATITUDE},${LONGITUDE}`;
+        
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            
+            // Access the precipitation data
+            const precipitationAmount = data.current.precip_mm; 
+            
+            displayDiv.textContent = `${precipitationAmount} mm/hr`;
+            
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            displayDiv.textContent = "Failed to fetch precipitation data. Please try again later.";
+        }
+    }
+
+    // Call the function to fetch data when the script loads
+    getHourlyPrecipitationData();
+</script>
 </html>

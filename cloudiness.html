@@ -4,96 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Understanding Cloudiness for Farmers</title>
+    <!-- We're using Tailwind CSS for all styling. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
+            font-family: 'Inter', sans-serif;
         }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        .cloudiness-level {
-            margin: 20px 0;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #ecf0f1;
-        }
-        .action {
-            background-color: #dff0d8;
-            border: 1px solid #d6e9c6;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
+
         .arrow-container {
-            display: flex;
-            justify-content: flex-start;
-            margin-top: 20px;
+            /* This is the key CSS to make the arrow stay in the bottom-left of the screen. */
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
         }
-        .arrow {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            transition: transform 0.3s;
+
+        /* Simple spinner animation for loading state */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        .arrow img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .arrow:hover {
-            transform: scale(1.1);
+        .animate-spin-slow {
+            animation: spin 1.5s linear infinite;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
 
-    <h1>Understanding Cloudiness for Farmers</h1>
-    <p>Cloudiness affects sunlight and water needs for crops. Here’s a guide to help you make informed decisions.</p>
+    <div class="max-w-4xl mx-auto">
+        <!-- Header Section -->
+        <h1 class="text-3xl font-bold text-center mb-2">Understanding Cloudiness for Agriculture</h1>
+        <p class="text-center text-gray-600 mb-8">Cloudiness affects sunlight and water needs for crops. Here’s a guide to help you make informed decisions.</p>
 
-    <div class="cloudiness-level">
-        <h2>Cloudiness Levels</h2>
-        <ul>
-            <li><strong>0% - 20%:</strong> Clear</li>
-            <li><strong>20% - 50%:</strong> Partly Cloudy</li>
-            <li><strong>50% - 80%:</strong> Mostly Cloudy</li>
-            <li><strong>80% - 100%:</strong> Overcast</li>
-        </ul>
-    </div>
-
-    <h2>What to Do Based on Cloudiness</h2>
-
-    <div class="action">
-        <h3>0% - 20%: Clear</h3>
-        <p>Water more; check crops regularly to prevent drying out.</p>
-    </div>
-
-    <div class="action">
-        <h3>20% - 50%: Partly Cloudy</h3>
-        <p>Maintain your usual watering schedule; monitor soil moisture.</p>
-    </div>
-
-    <div class="action">
-        <h3>50% - 80%: Mostly Cloudy</h3>
-        <p>Reduce watering; watch for rain and puddles in fields.</p>
-    </div>
-
-    <div class="action">
-        <h3>80% - 100%: Overcast</h3>
-        <p>Pause watering if rain is expected; prevent waterlogging.</p>
-    </div>
-    
-    <div class="arrow-container">
-        <a href="index.html">
-            <div class="arrow">
-                <img src="back.png" alt="Left Arrow">
+        <!-- Current Cloudiness Display Box -->
+        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center mb-6">
+            <!-- SVG icon for clouds, a clean replacement for a PNG. -->
+            <svg class="w-16 h-16 text-gray-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.8 10.4a3.5 3.5 0 00-3.5-3.5c-.1 0-.1 0-.2 0-.3-1.6-1.7-2.8-3.4-2.8-1.5 0-2.8.9-3.4 2.2a.5.5 0 01-.5.3h-.1a3.5 3.5 0 00-3.5 3.5c0 1.9 1.6 3.5 3.5 3.5h10.5c1.9 0 3.5-1.6 3.5-3.5z"/>
+            </svg>
+            <div class="text-xl font-bold text-gray-700 mt-2">Cloudiness</div>
+            <div id="cloudiness" class="text-lg font-medium text-gray-500 mt-1">
+                <!-- Loading indicator will be placed here -->
+                <svg class="animate-spin-slow h-5 w-5 mr-3 inline text-gray-500" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Fetching data...
             </div>
-        </a>
+        </div>
+
+        <!-- Cloudiness Levels Section -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4">Cloudiness Levels</h2>
+            <ul class="space-y-2 text-lg">
+                <li><strong>0% - 20%:</strong> Clear</li>
+                <li><strong>20% - 50%:</strong> Partly Cloudy</li>
+                <li><strong>50% - 80%:</strong> Mostly Cloudy</li>
+                <li><strong>80% - 100%:</strong> Overcast</li>
+            </ul>
+        </div>
+
+        <!-- Actions Section -->
+        <h2 class="text-2xl font-bold mb-4">What to Do Based on Cloudiness</h2>
+        <!-- The following sections now use Tailwind classes for consistent styling and spacing -->
+        <div class="bg-blue-100 border-l-4 border-blue-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-blue-800">0% - 20%: Clear</h3>
+            <p class="text-blue-700 mt-1">Water more; check crops regularly to prevent drying out.</p>
+        </div>
+
+        <div class="bg-blue-100 border-l-4 border-blue-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-blue-800">20% - 50%: Partly Cloudy</h3>
+            <p class="text-blue-700 mt-1">Maintain your usual watering schedule; monitor soil moisture.</p>
+        </div>
+
+        <div class="bg-gray-100 border-l-4 border-gray-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-gray-800">50% - 80%: Mostly Cloudy</h3>
+            <p class="text-gray-700 mt-1">Reduce watering; watch for rain and puddles in fields.</p>
+        </div>
+
+        <div class="bg-gray-100 border-l-4 border-gray-500 rounded-lg p-4 mb-4">
+            <h3 class="text-xl font-bold text-gray-800">80% - 100%: Overcast</h3>
+            <p class="text-gray-700 mt-1">Pause watering if rain is expected; prevent waterlogging.</p>
+        </div>
+        
+        <!-- Back Arrow/Navigation -->
+        <div class="arrow-container"> 
+            <a href="index.html"> 
+                <div class="arrow"> 
+                    <!-- SVG icon for the back arrow, replacing the old PNG -->
+                    <svg class="h-12 w-12 text-gray-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div> 
+            </a> 
+        </div>
     </div>
+    <script>
+        // Retrieve latitude and longitude from localStorage.
+        const LATITUDE = localStorage.getItem('latitude');
+        const LONGITUDE = localStorage.getItem('longitude'); 
+        // This API key is a placeholder and should be provided by the user if needed for local testing.
+        const weatherApiKey = '9b7bb83635a4ccfc33384b4f1c1d99cb'; 
+
+        /**
+         * Fetches cloudiness data from the OpenWeatherMap API for the current location.
+         * The function includes a retry mechanism with exponential backoff to handle
+         * temporary network failures.
+         */
+        async function getCloudinessData() {
+            const displayDiv = document.getElementById('cloudiness');
+            let retries = 0;
+            const maxRetries = 5;
+            const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+            while (retries < maxRetries) {
+                try {
+                    // Construct the API URL using latitude, longitude, and the API key.
+                    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${LATITUDE}&lon=${LONGITUDE}&appid=${weatherApiKey}`;
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    
+                    // The cloudiness value is a percentage found at data.clouds.all.
+                    const cloudiness = data.clouds.all; 
+                    displayDiv.textContent = `${cloudiness}%`; 
+                    return; // Exit on successful data fetch
+                } catch (error) {
+                    console.error("Error fetching cloudiness data:", error);
+                    retries++;
+                    // Exponential backoff: the wait time increases with each retry.
+                    await delay(1000 * Math.pow(2, retries)); 
+                }
+            }
+            // Display an error message if all retries fail.
+            displayDiv.textContent = `Error fetching cloudiness data after ${maxRetries} attempts.`;
+        }
+
+        // Check if latitude and longitude are available before attempting to fetch data.
+        if (LATITUDE && LONGITUDE) {
+            getCloudinessData();
+        } else {
+            // Display a message prompting the user to select a location.
+            document.getElementById('cloudiness').textContent = "Please select a location on the previous page to view cloudiness data.";
+        }
+    </script>
 </body>
 </html>
